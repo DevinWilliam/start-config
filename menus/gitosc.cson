@@ -1,0 +1,48 @@
+'menu': [
+  {
+    'label': 'Packages'
+    'submenu': [
+      'label': '码云'
+      'submenu': [
+        {
+          'label': '拉取项目'
+          'command': 'gitosc:clone-project'
+        }
+        {
+          'label': '创建项目'
+          'command': 'gitosc:create-project'
+        }
+        {
+          'label': '提交修改'
+          'command': 'gitosc:commit-project'
+        }
+        {
+          type: 'separator'
+        }
+        {
+          'label': '切换分支'
+          'command': 'gitosc:switch-branch'
+        }
+        {
+          'label': '查看修改'
+          'command': 'gitosc:compare-project'
+        }
+        {
+          type: 'separator'
+        }
+        {
+          'label': '仓库'
+          'command': 'gitosc:open-repository'
+        }
+        {
+          'label': '问题'
+          'command': 'gitosc:open-issues'
+        }
+        {
+          'label': '历史'
+          'command': 'gitosc:open-history'
+        }
+      ]
+    ]
+  }
+]

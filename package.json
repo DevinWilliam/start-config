@@ -1,0 +1,31 @@
+{
+  "name": "gitosc",
+  "main": "./lib/gitosc",
+  "version": "0.1.0",
+  "description": "Manage your GitOSC repositories from Atom",
+  "activationCommands": {
+    "atom-workspace": [
+      "gitosc:clone-project",
+      "gitosc:create-project",
+      "gitosc:commit-project",
+      "gitosc:switch-branch",
+      "gitosc:compare-project",
+      "gitosc:open-repository",
+      "gitosc:open-issues",
+      "gitosc:open-history"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://git.oschina.net/ziming200/atom-gitosc.git"
+  },
+  "license": "MIT",
+  "engines": {
+    "atom": ">=1.0.0 <2.0.0"
+  },
+  "dependencies": {
+    "atom-space-pen-views": "^2.2.0",
+    "axios": "^0.14.0",
+    "git-promise": "^0.3.0"
+  }
+}
