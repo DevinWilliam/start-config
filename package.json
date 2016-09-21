@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://git.oschina.net/ziming200/atom-gitosc.git"
+    "url": "git+https://github.com/fcharlie/atom-gitosc.git"
   },
   "license": "MIT",
   "engines": {
