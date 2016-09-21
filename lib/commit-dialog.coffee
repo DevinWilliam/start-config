@@ -46,7 +46,14 @@ class CommitDialog extends Dialog
 #      atom.notifications.addWarning('没有项目可供提交！')
 #      return
 
-    super
+    git 'git --no-pager diff', cwd: @projectDir
+    .then (data) =>
+      if data
+        super
+      else
+        throw new Error
+    .fail (err) ->
+      atom.notifications.addWarning('项目暂无修改，无需提交！')
 
   colorLength: ->
     too_long = false
