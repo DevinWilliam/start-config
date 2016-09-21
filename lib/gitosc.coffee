@@ -2,7 +2,8 @@ LoginDialog = require './login-dialog'
 CloneDialog = require './clone-dialog'
 CreateDialog = require './create-dialog'
 CommitDialog = require './commit-dialog'
-BranchDialog = require './branch-dialog'
+CreateBranchDialog = require './create-branch-dialog'
+SwitchBranchDialog = require './switch-branch-dialog'
 ProgressDialog = require './progress-dialog'
 DiffDialog = require './diff-dialog'
 
@@ -16,7 +17,8 @@ module.exports = GitOSC =
   cloneDialog: null
   createDialog: null
   commitDialog: null
-  branchDialog: null
+  createBranchDialog: null
+  switchBranchDialog: null
   progressDialog: null
   diffDialog: null
 
@@ -36,6 +38,8 @@ module.exports = GitOSC =
         @create()
       'gitosc:commit-project': =>
         @commit()
+      'gitosc:create-branch': =>
+        @branch()
       'gitosc:switch-branch': =>
         @switch()
       'gitosc:compare-project': =>
@@ -65,8 +69,11 @@ module.exports = GitOSC =
     @commitDialog?.deactivate()
     @commitDialog = null
 
-    @branchDialog?.deactivate()
-    @branchDialog = null
+    @createBranchDialog?.deactivate()
+    @createBranchDialog = null
+
+    @switchBranchDialog?.deactivate()
+    @switchBranchDialog = null
 
     @progressDialog?.deactivate()
     @progressDialog = null
@@ -81,7 +88,8 @@ module.exports = GitOSC =
     cloneDialogState: @cloneDialog?.serialize()
     createDialogState: @createDialog?.serialize()
     commitDialogState: @commitDialog?.serialize()
-    branchDialogState: @branchDialog?.serialize()
+    createBranchDialogState: @createBranchDialog?serialize()
+    switchBranchDialogState: @switchBranchDialog?.serialize()
     progressDialogState: @progressDialog?.serialize()
     diffDialogState: @diffDialog?.serialize()
     return
@@ -99,8 +107,11 @@ module.exports = GitOSC =
     unless @commitDialog?
       @commitDialog = new CommitDialog state.commitDialogState
 
-    unless @branchDialog?
-      @branchDialog = new BranchDialog state.branchDialogState
+    unless @createBranchDialog?
+      @createBranchDialog = new CreateBranchDialog state.createBranchDialogState
+
+    unless @switchBranchDialog?
+      @switchBranchDialog = new SwitchBranchDialog state.switchBranchDialogState
 
     unless @progressDialog?
       @progressDialog = new ProgressDialog state.progressDialogState
@@ -189,11 +200,25 @@ module.exports = GitOSC =
           if err
             atom.notifications.addWarning('提交代码失败！')
 
+  branch: ->
+    projectPath = getActiveProjectPath()
+    if projectPath
+      @createBranchDialog.activate projectPath, (err) ->
+        unless err
+          atom.notifications.addWarning('成功创建并切换分支！')
+        else
+          atom.notifications.addWarning('创建分支失败，原因不明。')
+    else
+      atom.notifications.addWarning('无法确定当前工程！')
+
   switch: ->
     projectPath = getActiveProjectPath()
     if projectPath
-      @branchDialog.activate projectPath, () ->
-
+      @switchBranchDialog.activate projectPath, (err) ->
+        unless err
+          atom.notifications.addWarning('切换分支成功！')
+        else
+          atom.notifications.addWarning('切换分支失败，原因不明。')
     else
       atom.notifications.addWarning('无法确定当前工程！')
 

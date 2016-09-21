@@ -8,6 +8,7 @@
       "gitosc:clone-project",
       "gitosc:create-project",
       "gitosc:commit-project",
+      "gitosc:create-branch",
       "gitosc:switch-branch",
       "gitosc:compare-project",
       "gitosc:open-repository",

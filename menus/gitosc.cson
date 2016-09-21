@@ -20,6 +20,10 @@
           type: 'separator'
         }
         {
+          'label': '创建分支'
+          'command': 'gitosc:create-branch'
+        }
+        {
           'label': '切换分支'
           'command': 'gitosc:switch-branch'
         }
