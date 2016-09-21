@@ -1,0 +1,2 @@
+# GIT@OSC Atom Extension
+
