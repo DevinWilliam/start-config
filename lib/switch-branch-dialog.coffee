@@ -38,7 +38,7 @@ class SwitchBranchDialog extends Dialog
           @branchList.append(option)
           branchCount += 1
 
-      if branchCount.length <= 1
+      if branchCount <= 1
         atom.notifications.addWarning('没有分支可切换！')
         return
 
