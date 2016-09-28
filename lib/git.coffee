@@ -30,6 +30,13 @@ module.exports = Git =
     .fail (err) ->
       callback(null)
 
+  effective: (callback) ->
+    git 'git --version'
+    .then (data) ->
+      callback(null)
+    .fail (err) ->
+      callback(err)
+
   clone: (path_with_namespace, clone_dir, callback) ->
     username = @username
     password = @password
