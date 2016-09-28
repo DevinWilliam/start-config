@@ -66,6 +66,10 @@ class CreateDialog extends Dialog
     unless @pro_description.val()
       @errmsg.text('请输入项目描述！')
       return
+    const myRe = /^[a-zA-Z][\w\-\.]*$/
+    unless myRe.test(@pro_name.val())
+      @errmsg.text('项目名 只允许字母、数字或者下划线(_)、中划线(-)、英文句号(.)，必须以字母开头')
+      return
     @deactivate()
 #    @callback(@projectList.val(), @pro_name.val(), @pro_description.val(), @pro_private.val())
     @callback(@pro_dir.val(), @pro_name.val(), @pro_description.val(), @pro_private.is(':checked'))
