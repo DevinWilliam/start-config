@@ -1,5 +1,6 @@
 axios = require 'axios'
 Dialog = require './dialog'
+fs = require 'fs'
 
 module.exports =
 class LoginDialog extends Dialog
@@ -29,12 +30,16 @@ class LoginDialog extends Dialog
   activate: (@callback) ->
     @errmsg.text('')
     @password.val('')
+    fs.readFile 'gitosc_email_cache', (err, data) =>
+      unless err
+        @email.val(data)
     super
 
   login: ->
     password = @password.val()
     axios.post 'https://git.oschina.net/api/v3/session', 'email=' + @email.val() + '&password=' + password
       .then (res) =>
+        fs.writeFile 'gitosc_email_cache', @email.val(), (err) ->
         @deactivate()
         @callback(res.data.username, password, res.data.private_token)
       .catch (err) =>
