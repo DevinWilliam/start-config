@@ -78,3 +78,5 @@ class CreateDialog extends Dialog
     dialog.showOpenDialog {properties:['openDirectory']}, (dirs) =>
       if dirs
         @pro_dir.val(dirs[0])
+        dir_seps = dirs[0].split(path.sep)
+        @pro_name.val(dir_seps[dir_seps.length-1])
