@@ -4,6 +4,9 @@ Dialog = require './dialog'
 remote = require('electron').remote
 dialog = remote.require('electron').dialog
 
+fs = require 'fs'
+path = require 'path'
+
 module.exports =
 class CloneDialog extends Dialog
   callback: null
@@ -70,6 +73,13 @@ class CloneDialog extends Dialog
     unless @cloneDir.val()
       @errmsg.text('请选择项目保存目录！')
       return
+    try
+      pro_dir_name = path_with_namespace.split('/')[1]
+      stat = fs.statSync path.join @cloneDir.val(), pro_dir_name
+      if stat.isDirectory()
+        @errmsg.text('项目目录已经存在！')
+        return
+    catch error
     @deactivate()
 #    @callback(@projectList.val(), @cloneDir.val())
     @callback(path_with_namespace, @cloneDir.val())
