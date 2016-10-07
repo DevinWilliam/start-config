@@ -41,7 +41,7 @@ class CloneDialog extends Dialog
         proCount = 0
         res.data.map (pro) =>
 #          @projectList.append("<option value='#{pro.path_with_namespace}'>#{pro.name}</option>")
-          @pro_list.append("<option value='#{pro.path_with_namespace}'>#{pro.name}</option>")
+          @pro_list.append("<option value='#{pro.path_with_namespace}'>#{pro.path_with_namespace}</option>")
           proCount += 1
 #        if @projectList.length > 0
         if proCount > 0
