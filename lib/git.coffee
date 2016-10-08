@@ -37,6 +37,14 @@ module.exports = Git =
     .fail (err) ->
       callback(err)
 
+  revise: (pro_dir, callback) ->
+    git 'git status', cwd: pro_dir
+    .then (stdout) ->
+      if stdout.indexOf('nothing to commit, working tree clean') > 0
+        callback(false)
+      else
+        callback(true)
+
   clone: (path_with_namespace, clone_dir, callback) ->
     username = @username
     password = @password

@@ -1,5 +1,5 @@
 path = require 'path'
-git = require 'git-promise'
+# git = require 'git-promise'
 
 Dialog = require './dialog'
 
@@ -46,14 +46,7 @@ class CommitDialog extends Dialog
 #      atom.notifications.addWarning('没有项目可供提交！')
 #      return
 
-    git 'git --no-pager diff', cwd: @projectDir
-    .then (data) =>
-      if data
-        super
-      else
-        throw new Error
-    .fail (err) ->
-      atom.notifications.addWarning('项目暂无修改，无需提交！')
+    super
 
   colorLength: ->
     too_long = false
