@@ -34,6 +34,7 @@ module.exports = Git =
     git 'git --version'
     .then (data) ->
       callback(null)
+      return
     .fail (err) ->
       callback(err)
 
@@ -41,9 +42,11 @@ module.exports = Git =
     git 'git status', cwd: pro_dir
     .then (stdout) ->
       if stdout.indexOf('nothing to commit, working tree clean') > 0
-        callback(false)
+        callback(null, false)
       else
-        callback(true)
+        callback(null, true)
+    .fail (err) ->
+      callback(err)
 
   clone: (path_with_namespace, clone_dir, callback) ->
     username = @username

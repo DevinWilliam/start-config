@@ -194,7 +194,11 @@ module.exports = GitOSC =
         atom.notifications.addWarning('无法确定当前工程！')
         return
 
-      git.revise projectPath, (goon) =>
+      git.revise projectPath, (err, goon) =>
+        if err
+          atom.notifications.addWarning('发生错误，原因可能是当前工程属于未托管项目')
+          return
+
         unless goon
           atom.notifications.addWarning('项目暂无修改，无需提交！')
           return
