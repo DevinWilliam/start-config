@@ -12,6 +12,9 @@ git = require './git'
 
 {CompositeDisposable} = require 'atom'
 
+noProjectFile = '无法确认当前编辑文件或当前编辑文件所属打开工程目录'
+noGitClient = '未安装Git客户端错误'
+
 module.exports = GitOSC =
   loginDialog: null
   cloneDialog: null
@@ -124,16 +127,16 @@ module.exports = GitOSC =
   clone: ->
     git.effective (err) =>
       if err
-        atom.notifications.addWarning('错误！你未安装Git客户端！')
+        atom.notifications.addWarning(noGitClient)
         return
 
       unless @private_token?
         @loginDialog.activate (username, password, @private_token) =>
           git.username = username
           git.password = password
-          @cloneDialog.activate @private_token, (path_with_namespace, clone_dir) =>
+          @cloneDialog.activate @private_token, (path_with_namespace, clone_dir, pro_name) =>
             @progressDialog.activate '拉取项目中...'
-            git.clone path_with_namespace, clone_dir, (err, pro_dir) =>
+            git.clone path_with_namespace, clone_dir, pro_name, (err, pro_dir) =>
               unless err
                 atom.project.addPath pro_dir
               @progressDialog.deactivate()
@@ -155,7 +158,7 @@ module.exports = GitOSC =
   create: ->
     git.effective (err) =>
       if err
-        atom.notifications.addWarning('错误！你未安装Git客户端！')
+        atom.notifications.addWarning(noGitClient)
         return
 
       unless @private_token?
@@ -186,18 +189,36 @@ module.exports = GitOSC =
   commit: ->
     git.effective (err) =>
       if err
-        atom.notifications.addWarning('错误！你未安装Git客户端！')
+        atom.notifications.addWarning(noGitClient)
         return
 
       projectPath = getActiveProjectPath()
       unless projectPath
-        atom.notifications.addWarning('无法确定当前工程！')
+        atom.notifications.addWarning(noProjectFile)
         return
 
-      unless @private_token?
-        @loginDialog.activate (username, password, @private_token) =>
-          git.username = username
-          git.password = password
+      git.revise projectPath, (err, goon) =>
+        if err
+          atom.notifications.addWarning('发生错误，原因可能是当前工程属于未托管项目')
+          return
+
+        unless goon
+          atom.notifications.addWarning('项目暂无修改，无需提交！')
+          return
+
+        unless @private_token?
+          @loginDialog.activate (username, password, @private_token) =>
+            git.username = username
+            git.password = password
+            @commitDialog.activate projectPath, (pro_dir, msg) =>
+              @progressDialog.activate '提交代码中...'
+              git.commit pro_dir, msg, (err) =>
+                @progressDialog.deactivate()
+
+                if err
+                  atom.notifications.addWarning('提交代码失败！')
+
+        else
           @commitDialog.activate projectPath, (pro_dir, msg) =>
             @progressDialog.activate '提交代码中...'
             git.commit pro_dir, msg, (err) =>
@@ -206,19 +227,10 @@ module.exports = GitOSC =
               if err
                 atom.notifications.addWarning('提交代码失败！')
 
-      else
-        @commitDialog.activate projectPath, (pro_dir, msg) =>
-          @progressDialog.activate '提交代码中...'
-          git.commit pro_dir, msg, (err) =>
-            @progressDialog.deactivate()
-
-            if err
-              atom.notifications.addWarning('提交代码失败！')
-
   branch: ->
     git.effective (err) =>
       if err
-        atom.notifications.addWarning('错误！你未安装Git客户端！')
+        atom.notifications.addWarning(noGitClient)
         return
 
       projectPath = getActiveProjectPath()
@@ -229,12 +241,12 @@ module.exports = GitOSC =
           else
             atom.notifications.addWarning('创建分支失败，原因不明。')
       else
-        atom.notifications.addWarning('无法确定当前工程！')
+        atom.notifications.addWarning(noProjectFile)
 
   switch: ->
     git.effective (err) =>
       if err
-        atom.notifications.addWarning('错误！你未安装Git客户端！')
+        atom.notifications.addWarning(noGitClient)
         return
 
       projectPath = getActiveProjectPath()
@@ -245,12 +257,12 @@ module.exports = GitOSC =
           else
             atom.notifications.addWarning('切换分支失败，原因不明。')
       else
-        atom.notifications.addWarning('无法确定当前工程！')
+        atom.notifications.addWarning(noProjectFile)
 
   compare: ->
     git.effective (err) =>
       if err
-        atom.notifications.addWarning('错误！你未安装Git客户端！')
+        atom.notifications.addWarning(noGitClient)
         return
 
       projectPath = getActiveProjectPath()
@@ -264,7 +276,7 @@ module.exports = GitOSC =
             return
           atom.notifications.addWarning('无法查看修改！')
       else
-        atom.notifications.addWarning('无法确定当前工程！')
+        atom.notifications.addWarning(noProjectFile)
 
 getActivePath = ->
   atom.workspace.getActivePaneItem()?.getPath?()

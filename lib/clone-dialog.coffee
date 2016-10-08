@@ -4,6 +4,9 @@ Dialog = require './dialog'
 remote = require('electron').remote
 dialog = remote.require('electron').dialog
 
+fs = require 'fs'
+path = require 'path'
+
 module.exports =
 class CloneDialog extends Dialog
   callback: null
@@ -19,7 +22,9 @@ class CloneDialog extends Dialog
         @div class: 'selectbox', =>
           @select change: 'choose_pro', outlet: 'pro_list'
           @input class: 'native-key-bindings', outlet: 'pro'
-        @label '目录'
+        @label '本地工程名'
+        @input class: 'native-key-bindings', type: 'text', outlet: 'dirName'
+        @label '保存目录'
         @input class: 'native-key-bindings', type: 'text', readonly: true, outlet: 'cloneDir', click: 'choose_dir'
         @label class: 'error', outlet: 'errmsg'
       @div class: 'buttons', =>
@@ -41,7 +46,7 @@ class CloneDialog extends Dialog
         proCount = 0
         res.data.map (pro) =>
 #          @projectList.append("<option value='#{pro.path_with_namespace}'>#{pro.name}</option>")
-          @pro_list.append("<option value='#{pro.path_with_namespace}'>#{pro.name}</option>")
+          @pro_list.append("<option value='#{pro.path_with_namespace}'>#{pro.path_with_namespace}</option>")
           proCount += 1
 #        if @projectList.length > 0
         if proCount > 0
@@ -70,14 +75,24 @@ class CloneDialog extends Dialog
     unless @cloneDir.val()
       @errmsg.text('请选择项目保存目录！')
       return
+    unless @dirName.val()
+      @errmsg.text('请输入本地工程名称！')
+      return
+    try
+      stat = fs.statSync path.join @cloneDir.val(), @dirName.val()
+      if stat.isDirectory()
+        @errmsg.text('项目目录已经存在！')
+        return
+    catch error
     @deactivate()
 #    @callback(@projectList.val(), @cloneDir.val())
-    @callback(path_with_namespace, @cloneDir.val())
+    @callback(path_with_namespace, @cloneDir.val(), @dirName.val())
 
   choose_pro: ->
     for pro in @pro_list.children('option')
       if pro.selected
         @pro.val(pro.text)
+        @dirName.val(pro.text.split('/')[1])
 
   choose_dir: ->
     dialog.showOpenDialog {properties:['openDirectory']}, (dirs) =>
