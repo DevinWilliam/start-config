@@ -48,12 +48,12 @@ module.exports = Git =
     .fail (err) ->
       callback(err)
 
-  clone: (path_with_namespace, clone_dir, callback) ->
+  clone: (path_with_namespace, clone_dir, pro_name, callback) ->
     username = @username
     password = @password
     clone_url = 'https://git.oschina.net/' + path_with_namespace
-    pro_dir = clone_dir + path_with_namespace.split('/')[1]
-    cmd = 'clone https://' + username + ':' + password + '@' + clone_url.split('//')[1]
+    pro_dir = clone_dir + pro_name
+    cmd = 'clone https://' + username + ':' + password + '@' + clone_url.split('//')[1] + ' ' + pro_name
     git cmd, cwd: clone_dir
     .then () ->
       git 'git remote rm origin', cwd: pro_dir
@@ -95,6 +95,8 @@ module.exports = Git =
         .fail (err) ->
           callback(err)
         .finally () ->
+          git 'git remote rm origin'
+          git 'git remote rm gitosc'
           git 'git remote add origin https://git.oschina.net/' + username + '/' + pro_name, cwd: pro_dir
           git 'git remote add gitosc https://git.oschina.net/' + username + '/' + pro_name, cwd: pro_dir
           return

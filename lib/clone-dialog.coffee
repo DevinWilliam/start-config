@@ -22,7 +22,9 @@ class CloneDialog extends Dialog
         @div class: 'selectbox', =>
           @select change: 'choose_pro', outlet: 'pro_list'
           @input class: 'native-key-bindings', outlet: 'pro'
-        @label '目录'
+        @label '本地工程名'
+        @input class: 'native-key-bindings', type: 'text', outlet: 'dirName'
+        @label '保存目录'
         @input class: 'native-key-bindings', type: 'text', readonly: true, outlet: 'cloneDir', click: 'choose_dir'
         @label class: 'error', outlet: 'errmsg'
       @div class: 'buttons', =>
@@ -73,21 +75,24 @@ class CloneDialog extends Dialog
     unless @cloneDir.val()
       @errmsg.text('请选择项目保存目录！')
       return
+    unless @dirName.val()
+      @errmsg.text('请输入本地工程名称！')
+      return
     try
-      pro_dir_name = path_with_namespace.split('/')[1]
-      stat = fs.statSync path.join @cloneDir.val(), pro_dir_name
+      stat = fs.statSync path.join @cloneDir.val(), @dirName.val()
       if stat.isDirectory()
         @errmsg.text('项目目录已经存在！')
         return
     catch error
     @deactivate()
 #    @callback(@projectList.val(), @cloneDir.val())
-    @callback(path_with_namespace, @cloneDir.val())
+    @callback(path_with_namespace, @cloneDir.val(), @dirName.val())
 
   choose_pro: ->
     for pro in @pro_list.children('option')
       if pro.selected
         @pro.val(pro.text)
+        @dirName.val(pro.text.split('/')[1])
 
   choose_dir: ->
     dialog.showOpenDialog {properties:['openDirectory']}, (dirs) =>
