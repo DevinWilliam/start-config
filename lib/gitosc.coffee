@@ -206,10 +206,24 @@ module.exports = GitOSC =
           atom.notifications.addWarning('项目暂无修改，无需提交！')
           return
 
-        unless @private_token?
-          @loginDialog.activate (username, password, @private_token) =>
-            git.username = username
-            git.password = password
+        git.getOSCRemote projectPath, (origin) =>
+          unless origin
+            atom.notifications.addWarning('当前项目不属于码云托管项目')
+            return
+
+          unless @private_token?
+            @loginDialog.activate (username, password, @private_token) =>
+              git.username = username
+              git.password = password
+              @commitDialog.activate projectPath, (pro_dir, msg) =>
+                @progressDialog.activate '提交代码中...'
+                git.commit pro_dir, msg, (err) =>
+                  @progressDialog.deactivate()
+
+                  if err
+                    atom.notifications.addWarning('提交代码失败！')
+
+          else
             @commitDialog.activate projectPath, (pro_dir, msg) =>
               @progressDialog.activate '提交代码中...'
               git.commit pro_dir, msg, (err) =>
@@ -217,15 +231,6 @@ module.exports = GitOSC =
 
                 if err
                   atom.notifications.addWarning('提交代码失败！')
-
-        else
-          @commitDialog.activate projectPath, (pro_dir, msg) =>
-            @progressDialog.activate '提交代码中...'
-            git.commit pro_dir, msg, (err) =>
-              @progressDialog.deactivate()
-
-              if err
-                atom.notifications.addWarning('提交代码失败！')
 
   branch: ->
     git.effective (err) =>

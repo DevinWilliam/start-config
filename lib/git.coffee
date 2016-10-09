@@ -30,6 +30,17 @@ module.exports = Git =
     .fail (err) ->
       callback(null)
 
+  getOSCRemote: (pro_dir, callback) ->
+    git 'git remote -v', cwd: pro_dir
+    .then (data) ->
+      origin = data.match(/origin\s(.+)\s\(push\)/)[1]
+      if origin && origin.indexOf('https://git.oschina.net/') == 0
+        callback(origin)
+      else
+        callback(null)
+    .fail (err) ->
+      callback(null)
+
   effective: (callback) ->
     git 'git --version'
     .then (data) ->
@@ -63,7 +74,6 @@ module.exports = Git =
       callback(err, null)
     .finally () ->
       git 'git remote add origin https://git.oschina.net/' + path_with_namespace, cwd: pro_dir
-      git 'git remote add gitosc https://git.oschina.net/' + path_with_namespace, cwd: pro_dir
       return
 
   initial: (pro_dir, callback) ->
@@ -96,9 +106,7 @@ module.exports = Git =
           callback(err)
         .finally () ->
           git 'git remote rm origin'
-          git 'git remote rm gitosc'
           git 'git remote add origin https://git.oschina.net/' + username + '/' + pro_name, cwd: pro_dir
-          git 'git remote add gitosc https://git.oschina.net/' + username + '/' + pro_name, cwd: pro_dir
           return
       .catch (err) ->
         callback(err)
@@ -106,31 +114,30 @@ module.exports = Git =
   commit: (pro_dir, message, callback) ->
     username = @username
     password = @password
+    getOSCRemote = @getOSCRemote
     @getCurrentBranch pro_dir, (cur_branch) ->
       if cur_branch
-        git 'git remote -v', cwd: pro_dir
-        .then (data) ->
-          origin = data.match(/gitosc\s(.+)\s\(push\)/)[1]
+        getOSCRemote pro_dir, (origin) ->
           if origin
             cmd = 'git remote add temp123 https://' + username + ':' + password + '@' + origin.split('//')[1]
             git cmd, cwd: pro_dir
+            .then () ->
+              git 'git add -A', cwd: pro_dir
+            .then () ->
+              git 'git commit -m "' + message + '"', cwd: pro_dir
+            .then () ->
+              git 'git push temp123 ' + cur_branch, cwd: pro_dir
+            .then () ->
+              callback(null)
+            .fail (err) ->
+              callback(err)
+            .finally () ->
+              git 'git remote rm temp123', cwd: pro_dir
+              return
           else
-            throw new Error('这不是码云项目')
-        .then () ->
-          git 'git add -A', cwd: pro_dir
-        .then () ->
-          git 'git commit -m "' + message + '"', cwd: pro_dir
-        .then () ->
-          git 'git push temp123 ' + cur_branch, cwd: pro_dir
-        .then () ->
-          callback(null)
-        .fail (err) ->
-          callback(err)
-        .finally () ->
-          git 'git remote rm temp123', cwd: pro_dir
-          return
+            callback(new Error('这不是码云项目'))
       else
-        callback('获取当前分支出错')
+        callback(new Error('获取当前分支出错'))
 
   diff: (pro_dir, callback) ->
     git 'git --no-pager diff', cwd: pro_dir
