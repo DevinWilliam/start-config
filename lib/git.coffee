@@ -11,12 +11,15 @@ module.exports = Git =
     git 'git branch', cwd: @pro_dir
     .then (data) ->
       branches = new Array()
-      for branch in data.split('\n')
-        if branch
-          if branch[0] == '*'
-            branches.push(branch.slice(2))
-          else
-            branches.push(branch)
+      if data
+        for branch in data.split('\n')
+          if branch
+            if branch[0] == '*'
+              branches.push(branch.slice(2))
+            else
+              branches.push(branch)
+      else
+        branches.push('master')
       callback(branches)
     .fail (err) ->
       callback(null)
@@ -24,11 +27,15 @@ module.exports = Git =
   getCurrentBranch: (pro_dir, callback) ->
     git 'git branch', cwd: pro_dir
     .then (data) ->
-      for branch in data.split('\n')
-        if branch
-          if branch[0] == '*'
-            callback(branch.slice(2))
-            break
+      if data
+        for branch in data.split('\n')
+          if branch
+            if branch[0] == '*'
+              callback(branch.slice(2))
+              break
+      else
+        callback('master')
+      return
     .fail (err) ->
       callback(null)
 
