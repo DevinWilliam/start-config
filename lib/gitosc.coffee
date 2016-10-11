@@ -165,7 +165,7 @@ module.exports = GitOSC =
         @loginDialog.activate (username, password, @private_token) =>
           git.username = username
           git.password = password
-          @createDialog.activate (pro_dir, pro_name, pro_description, pro_private) =>
+          @createDialog.activate @private_token, (pro_dir, pro_name, pro_description, pro_private) =>
             @progressDialog.activate '创建仓库中...'
             git.create @private_token, pro_dir, pro_name, pro_description, pro_private, (err) =>
               @progressDialog.deactivate()
@@ -176,7 +176,7 @@ module.exports = GitOSC =
                 atom.project.addPath pro_dir
 
       else
-        @createDialog.activate (pro_dir, pro_name, pro_description, pro_private) =>
+        @createDialog.activate @private_token, (pro_dir, pro_name, pro_description, pro_private) =>
           @progressDialog.activate '创建仓库中...'
           git.create @private_token, pro_dir, pro_name, pro_description, pro_private, (err) =>
             @progressDialog.deactivate()
