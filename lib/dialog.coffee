@@ -8,7 +8,7 @@ class Dialog extends View
     unless @panel?
       @addClass('active')
       @panel = atom.workspace.addModalPanel item: this
-      @parent().css('top', '-40px')
+      @parent().css('top', '-1000px')
     return
 
   deactivate: ->

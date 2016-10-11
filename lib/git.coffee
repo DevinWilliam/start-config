@@ -65,7 +65,7 @@ module.exports = Git =
     username = @username
     password = @password
     clone_url = 'https://git.oschina.net/' + path_with_namespace
-    pro_dir = path.join clone_dir,pro_name
+    pro_dir = path.join clone_dir, pro_name
     cmd = 'clone https://' + username + ':' + password + '@' + clone_url.split('//')[1] + ' ' + pro_name
     git cmd, cwd: clone_dir
     .then () ->
