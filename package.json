@@ -1,7 +1,7 @@
 {
   "name": "gitosc",
   "main": "./lib/gitosc",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "使用 ATOM 管理你码云上的项目",
   "activationCommands": {
     "atom-workspace": [
