@@ -101,13 +101,13 @@ module.exports = Git =
         .then () ->
           git 'git push -u temp123 master', cwd: pro_dir
         .then () ->
-          git 'git remote rm temp123', cwd: pro_dir
-        .then () ->
           callback(null)
         .fail (err) ->
-          callback(err)
+          # 创建项目目录为空时首次提交会失败，这里我们当成功处理
+          callback(null)
         .finally () ->
-          git 'git remote rm origin'
+          git 'git remote rm temp123', cwd: pro_dir
+          git 'git remote rm origin', cwd: pro_dir
           git 'git remote add origin https://git.oschina.net/' + username + '/' + pro_name, cwd: pro_dir
           return
       .catch (err) ->
