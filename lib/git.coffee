@@ -38,6 +38,9 @@ module.exports = Git =
       origin = data.match(/origin\s(.+)\s\(push\)/)[1]
       if origin && origin.indexOf('https://git.oschina.net/') == 0
         callback(origin)
+      else if origin && origin.indexOf('git@git.oschina.net:') == 0
+        origin = origin.replace('git@git.oschina.net:', 'https://git.oschina.net/')
+        callback(origin)
       else
         callback(null)
     .fail (err) ->
