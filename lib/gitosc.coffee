@@ -145,9 +145,9 @@ module.exports = GitOSC =
                 atom.notifications.addWarning('拉取项目代码出错！')
 
       else
-        @cloneDialog.activate @private_token, (path_with_namespace, clone_dir) =>
+        @cloneDialog.activate @private_token, (path_with_namespace, clone_dir, pro_name) =>
           @progressDialog.activate '拉取项目中...'
-          git.clone path_with_namespace, clone_dir, (err, pro_dir) =>
+          git.clone path_with_namespace, clone_dir, pro_name, (err, pro_dir) =>
             unless err
               atom.project.addPath pro_dir
             @progressDialog.deactivate()
