@@ -11,12 +11,15 @@ module.exports = Git =
     git 'git branch', cwd: @pro_dir
     .then (data) ->
       branches = new Array()
-      for branch in data.split('\n')
-        if branch
-          if branch[0] == '*'
-            branches.push(branch.slice(2))
-          else
-            branches.push(branch)
+      if data
+        for branch in data.split('\n')
+          if branch
+            if branch[0] == '*'
+              branches.push(branch.slice(2))
+            else
+              branches.push(branch)
+      else
+        branches.push('master')
       callback(branches)
     .fail (err) ->
       callback(null)
@@ -24,11 +27,15 @@ module.exports = Git =
   getCurrentBranch: (pro_dir, callback) ->
     git 'git branch', cwd: pro_dir
     .then (data) ->
-      for branch in data.split('\n')
-        if branch
-          if branch[0] == '*'
-            callback(branch.slice(2))
-            break
+      if data
+        for branch in data.split('\n')
+          if branch
+            if branch[0] == '*'
+              callback(branch.slice(2))
+              break
+      else
+        callback('master')
+      return
     .fail (err) ->
       callback(null)
 
@@ -37,6 +44,9 @@ module.exports = Git =
     .then (data) ->
       origin = data.match(/origin\s(.+)\s\(push\)/)[1]
       if origin && origin.indexOf('https://git.oschina.net/') == 0
+        callback(origin)
+      else if origin && origin.indexOf('git@git.oschina.net:') == 0
+        origin = origin.replace('git@git.oschina.net:', 'https://git.oschina.net/')
         callback(origin)
       else
         callback(null)
@@ -93,24 +103,26 @@ module.exports = Git =
     username = @username
     password = @password
     @initial pro_dir, (err) ->
-      arg = 'name=' + pro_name + '&description=' + pro_description + '&private=' + if pro_private then '1' else '0'
-      axios.post 'https://git.oschina.net/api/v3/projects?private_token=' + private_token, arg
-      .then (res) ->
-        cmd = 'git remote add temp123 https://' + username + ':' + password + '@git.oschina.net/' + username + '/' + pro_name
-        git cmd, cwd: pro_dir
-        .then () ->
+      cmd = 'git remote add temp123 https://' + username + ':' + password + '@git.oschina.net/' + username + '/' + pro_name
+      git cmd, cwd: pro_dir
+      .then () ->
+        arg = 'name=' + pro_name + '&description=' + pro_description + '&private=' + if pro_private then '1' else '0'
+        axios.post 'https://git.oschina.net/api/v3/projects?private_token=' + private_token, arg
+        .then (res) ->
           git 'git push -u temp123 master', cwd: pro_dir
-        .then () ->
-          git 'git remote rm temp123', cwd: pro_dir
-        .then () ->
-          callback(null)
-        .fail (err) ->
+          .then () ->
+            callback(null)
+          .fail (err) ->
+            # 创建项目目录为空时首次提交会失败，这里我们当成功处理
+            callback(null)
+          .finally () ->
+            git 'git remote rm temp123', cwd: pro_dir
+            git 'git remote rm origin', cwd: pro_dir
+            git 'git remote add origin https://git.oschina.net/' + username + '/' + pro_name, cwd: pro_dir
+            return
+        .catch (err) ->
           callback(err)
-        .finally () ->
-          git 'git remote rm origin'
-          git 'git remote add origin https://git.oschina.net/' + username + '/' + pro_name, cwd: pro_dir
-          return
-      .catch (err) ->
+      .fail (err) ->
         callback(err)
 
   commit: (pro_dir, message, callback) ->
