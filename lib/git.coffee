@@ -117,9 +117,9 @@ module.exports = Git =
             callback(null)
           .finally () ->
             git 'git remote rm temp123', cwd: pro_dir
-            .then () ->
+            .finally () ->
               git 'git remote rm origin', cwd: pro_dir
-            .then () ->
+            .finally () ->
               git 'git remote add origin https://git.oschina.net/' + username + '/' + pro_name, cwd: pro_dir
             return
         .catch (err) ->
