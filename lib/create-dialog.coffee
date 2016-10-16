@@ -58,6 +58,7 @@ class CreateDialog extends Dialog
 
     axios.get 'https://git.oschina.net/api/v3/projects?page=1&per_page=1000&private_token=' + private_token
     .then (res) =>
+      @exist_pro_list = []
       res.data.map (pro) =>
         @exist_pro_list.push(pro.name)
 
