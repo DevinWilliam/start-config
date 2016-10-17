@@ -14,7 +14,7 @@ apm install gitosc
 
 或者可以打开设置页面安装 gitosc
 
-![Install](./images/install.png)
+![Install](http://git.oschina.net/GitGroup/atom-gitosc/raw/master/images/install.png)
 
 ## 如何使用
 
