@@ -103,27 +103,21 @@ module.exports = Git =
     username = @username
     password = @password
     @initial pro_dir, (err) ->
-      cmd = 'git remote add temp123 https://' + username + ':' + password + '@git.oschina.net/' + username + '/' + pro_name
-      git cmd, cwd: pro_dir
-      .then () ->
-        arg = 'name=' + pro_name + '&description=' + pro_description + '&private=' + if pro_private then '1' else '0'
-        axios.post 'https://git.oschina.net/api/v3/projects?private_token=' + private_token, arg
-        .then (res) ->
-          git 'git push -u temp123 master', cwd: pro_dir
-          .then () ->
-            callback(null)
-          .fail (err) ->
-            # 创建项目目录为空时首次提交会失败，这里我们当成功处理
-            callback(null)
+      arg = 'name=' + pro_name + '&description=' + pro_description + '&private=' + if pro_private then '1' else '0'
+      axios.post 'https://git.oschina.net/api/v3/projects?private_token=' + private_token, arg
+      .then (res) ->
+        remote_url = 'https://' + username + ':' + password + '@git.oschina.net/' + username + '/' + pro_name
+        git 'git push -u ' + remote_url + ' master', cwd: pro_dir
+        .then () ->
+          callback(null)
+        .fail (err) ->
+          # 创建项目目录为空时首次提交会失败，这里我们当成功处理
+          callback(null)
+        .finally () ->
+          git 'git remote rm origin', cwd: pro_dir
           .finally () ->
-            git 'git remote rm temp123', cwd: pro_dir
-            .finally () ->
-              git 'git remote rm origin', cwd: pro_dir
-            .finally () ->
-              git 'git remote add origin https://git.oschina.net/' + username + '/' + pro_name, cwd: pro_dir
-            return
-        .catch (err) ->
-          callback(err)
+            git 'git remote add origin https://git.oschina.net/' + username + '/' + pro_name, cwd: pro_dir
+          return
       .fail (err) ->
         callback(err)
 
@@ -135,21 +129,16 @@ module.exports = Git =
       if cur_branch
         getOSCRemote pro_dir, (origin) ->
           if origin
-            cmd = 'git remote add temp123 https://' + username + ':' + password + '@' + origin.split('//')[1]
-            git cmd, cwd: pro_dir
-            .then () ->
-              git 'git add -A', cwd: pro_dir
+            git 'git add -A', cwd: pro_dir
             .then () ->
               git 'git commit -m "' + message + '"', cwd: pro_dir
             .then () ->
-              git 'git push temp123 ' + cur_branch, cwd: pro_dir
+              remote_url = 'https://' + username + ':' + password + '@' + origin.split('//')[1]
+              git 'git push ' + remote_url + ' ' + cur_branch, cwd: pro_dir
             .then () ->
               callback(null)
             .fail (err) ->
               callback(err)
-            .finally () ->
-              git 'git remote rm temp123', cwd: pro_dir
-              return
           else
             callback(new Error('这不是码云项目'))
       else
