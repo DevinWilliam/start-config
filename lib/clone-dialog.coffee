@@ -15,7 +15,7 @@ class CloneDialog extends Dialog
     @div class: 'gitosc-dialog', =>
       @div class: 'heading', =>
         @i class: 'icon x clickable', click: 'cancel'
-        @strong '码云 -- 拉取项目'
+        @strong '码云 -- 克隆项目'
       @div class: 'body', =>
         @label '项目'
 #        @select class: 'native-key-bindings', outlet: 'projectList'
@@ -59,11 +59,11 @@ class CloneDialog extends Dialog
 
   clone: ->
 #    unless @projectList.val()
-#      @errmsg.text('请选择要拉取的项目！')
+#      @errmsg.text('请选择要克隆的项目！')
 #      return
     pro_name = @pro.val()
     unless pro_name
-      @errmsg.text('请输入或选择要拉取的项目！')
+      @errmsg.text('请输入或选择要克隆的项目！')
       return
     path_with_namespace = null
     for pro in @pro_list.children('option')
