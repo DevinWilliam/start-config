@@ -9,10 +9,10 @@ ATOM 是程序员非常喜爱的代码编辑器之一,并且拥有良好的插�
 在命令行或者终端中运行:
 
 ```shell
-apm install gitosc
+apm install gitee
 ```
 
-或者可以打开设置页面安装 gitosc
+或者可以打开设置页面安装 gitee
 
 ![Install](https://gitee.com/GitGroup/atom-gitosc/raw/master/images/install.png)
 
