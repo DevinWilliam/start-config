@@ -1,7 +1,7 @@
 {
   "name": "gitee",
   "main": "./lib/gitee",
-  "version": "1.7.1",
+  "version": "1.7.2",
   "description": "使用 ATOM 管理你码云上的项目",
   "activationCommands": {
     "atom-workspace": [
