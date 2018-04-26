@@ -16,10 +16,6 @@ apm install gitee
 
 ![Install](https://gitee.com/GitGroup/atom-gitosc/raw/master/images/install.png)
 
-## 如何使用
-
-可以查看新闻 [码云 ATOM 插件正式上线](http://www.oschina.net/news/78129/atom-plugin)
-
 ## 发现问题
 
 如果你在使用中发现问题或者有任何建议,可以去 [https://gitee.com/GitGroup/atom-gitosc](http://gitee.com/GitGroup/atom-gitosc) 提交 Issue
