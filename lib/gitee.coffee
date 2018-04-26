@@ -15,7 +15,7 @@ git = require './git'
 noProjectFile = '无法确认当前编辑文件或当前编辑文件所属打开工程目录'
 noGitClient = '未安装Git客户端错误'
 
-module.exports = GitOSC =
+module.exports = Gitee =
   loginDialog: null
   cloneDialog: null
   createDialog: null
