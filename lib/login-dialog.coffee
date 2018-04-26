@@ -37,7 +37,7 @@ class LoginDialog extends Dialog
 
   login: ->
     password = @password.val()
-    axios.post 'https://git.oschina.net/api/v3/session', 'email=' + @email.val() + '&password=' + password
+    axios.post 'https://gitee.com/api/v3/session', 'email=' + @email.val() + '&password=' + password
       .then (res) =>
         fs.writeFile 'gitosc_email_cache', @email.val(), (err) ->
         @deactivate()

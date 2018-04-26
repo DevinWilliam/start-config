@@ -39,7 +39,7 @@ class CloneDialog extends Dialog
 
   activate: (private_token, @callback) ->
     @errmsg.text('')
-    axios.get 'https://git.oschina.net/api/v3/projects?page=1&per_page=1000&private_token=' + private_token
+    axios.get 'https://gitee.com/api/v3/projects?page=1&per_page=1000&private_token=' + private_token
       .then (res) =>
 #        @projectList.empty()
         @pro_list.empty()
