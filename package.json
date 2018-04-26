@@ -1,5 +1,5 @@
 {
-  "name": "gitosc",
+  "name": "gitee",
   "main": "./lib/gitosc",
   "version": "1.5.1",
   "description": "使用 ATOM 管理你码云上的项目",
@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/fcharlie/atom-gitosc.git"
+    "url": "https://github.com/fcharlie/atom-gitee.git"
   },
   "license": "MIT",
   "engines": {
