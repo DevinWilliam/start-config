@@ -7,7 +7,7 @@ class SwitchBranchDialog extends Dialog
   projectDir: null
 
   @content: ->
-    @div class: 'gitosc-dialog', =>
+    @div class: 'gitee-dialog', =>
       @div class: 'heading', =>
         @i class: 'icon x clickable', click: 'cancel'
         @strong '码云 -- 切换分支'

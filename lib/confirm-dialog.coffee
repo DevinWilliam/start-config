@@ -6,7 +6,7 @@ class ConfirmDialog extends Dialog
   params: null
 
   @content: ->
-    @div class: 'gitosc-dialog active', =>
+    @div class: 'gitee-dialog active', =>
       @div class: 'heading', =>
         @i class: 'icon x clickable', click: 'cancel'
         @strong params.hdr

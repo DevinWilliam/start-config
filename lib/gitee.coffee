@@ -35,25 +35,25 @@ module.exports = GitOSC =
     @createViews(state)
 
     @subscriptions.add atom.commands.add 'atom-workspace',
-      'gitosc:clone-project': =>
+      'gitee:clone-project': =>
         @clone()
-      'gitosc:create-project': =>
+      'gitee:create-project': =>
         @create()
-      'gitosc:commit-project': =>
+      'gitee:commit-project': =>
         @commit()
-      'gitosc:create-branch': =>
+      'gitee:create-branch': =>
         @branch()
-      'gitosc:switch-branch': =>
+      'gitee:switch-branch': =>
         @switch()
-      'gitosc:compare-project': =>
+      'gitee:compare-project': =>
         @compare()
-      'gitosc:open-repository': ->
+      'gitee:open-repository': ->
         if itemPath = getActivePath()
           GitFile.fromPath(itemPath).openRepository()
-      'gitosc:open-issues': ->
+      'gitee:open-issues': ->
         if itemPath = getActivePath()
           GitFile.fromPath(itemPath).openIssues()
-      'gitosc:open-history': ->
+      'gitee:open-history': ->
         if itemPath = getActivePath()
           GitFile.fromPath(itemPath).history()
 

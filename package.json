@@ -1,19 +1,19 @@
 {
   "name": "gitee",
-  "main": "./lib/gitosc",
+  "main": "./lib/gitee",
   "version": "1.6.1",
   "description": "使用 ATOM 管理你码云上的项目",
   "activationCommands": {
     "atom-workspace": [
-      "gitosc:clone-project",
-      "gitosc:create-project",
-      "gitosc:commit-project",
-      "gitosc:create-branch",
-      "gitosc:switch-branch",
-      "gitosc:compare-project",
-      "gitosc:open-repository",
-      "gitosc:open-issues",
-      "gitosc:open-history"
+      "gitee:clone-project",
+      "gitee:create-project",
+      "gitee:commit-project",
+      "gitee:create-branch",
+      "gitee:switch-branch",
+      "gitee:compare-project",
+      "gitee:open-repository",
+      "gitee:open-issues",
+      "gitee:open-history"
     ]
   },
   "repository": {

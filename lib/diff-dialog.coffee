@@ -15,10 +15,10 @@ fmtNum = (num) ->
 
 class DiffView extends ScrollView
   @content: ->
-    @div class: 'gitosc-diff'
+    @div class: 'gitee-diff'
 
   getTitle: ->
-    return 'gitosc-diff'
+    return 'gitee-diff'
 
   clearAll: ->
     @find('>.line').remove()
@@ -71,7 +71,7 @@ class DiffView extends ScrollView
 module.exports =
 class DiffDialog extends Dialog
   @content: ->
-    @div class: 'gitosc-dialog', =>
+    @div class: 'gitee-dialog', =>
       @div class: 'heading', =>
         @i class: 'icon x clickable', click: 'cancel'
         @strong '码云 -- 查看修改'

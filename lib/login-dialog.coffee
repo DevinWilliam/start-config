@@ -7,7 +7,7 @@ class LoginDialog extends Dialog
   callback: null
 
   @content: ->
-    @div class: 'gitosc-dialog', =>
+    @div class: 'gitee-dialog', =>
       @div class: 'heading', =>
         @i class: 'icon x clickable', click: 'cancel'
         @strong '码云 -- 登录'
@@ -30,7 +30,7 @@ class LoginDialog extends Dialog
   activate: (@callback) ->
     @errmsg.text('')
     @password.val('')
-    fs.readFile 'gitosc_email_cache', (err, data) =>
+    fs.readFile 'gitee_email_cache', (err, data) =>
       unless err
         @email.val(data)
     super
@@ -39,7 +39,7 @@ class LoginDialog extends Dialog
     password = @password.val()
     axios.post 'https://gitee.com/api/v3/session', 'email=' + @email.val() + '&password=' + password
       .then (res) =>
-        fs.writeFile 'gitosc_email_cache', @email.val(), (err) ->
+        fs.writeFile 'gitee_email_cache', @email.val(), (err) ->
         @deactivate()
         @callback(res.data.username, password, res.data.private_token)
       .catch (err) =>

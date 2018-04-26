@@ -6,45 +6,45 @@
       'submenu': [
         {
           'label': '克隆项目'
-          'command': 'gitosc:clone-project'
+          'command': 'gitee:clone-project'
         }
         {
           'label': '创建项目'
-          'command': 'gitosc:create-project'
+          'command': 'gitee:create-project'
         }
         {
           'label': '提交修改'
-          'command': 'gitosc:commit-project'
+          'command': 'gitee:commit-project'
         }
         {
           type: 'separator'
         }
         {
           'label': '创建分支'
-          'command': 'gitosc:create-branch'
+          'command': 'gitee:create-branch'
         }
         {
           'label': '切换分支'
-          'command': 'gitosc:switch-branch'
+          'command': 'gitee:switch-branch'
         }
         {
           'label': '查看修改'
-          'command': 'gitosc:compare-project'
+          'command': 'gitee:compare-project'
         }
         {
           type: 'separator'
         }
         {
           'label': '仓库'
-          'command': 'gitosc:open-repository'
+          'command': 'gitee:open-repository'
         }
         {
           'label': '问题'
-          'command': 'gitosc:open-issues'
+          'command': 'gitee:open-issues'
         }
         {
           'label': '历史'
-          'command': 'gitosc:open-history'
+          'command': 'gitee:open-history'
         }
       ]
     ]

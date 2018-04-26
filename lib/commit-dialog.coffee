@@ -9,7 +9,7 @@ class CommitDialog extends Dialog
   projectDir: null
 
   @content: ->
-    @div class: 'gitosc-dialog', =>
+    @div class: 'gitee-dialog', =>
       @div class: 'heading', =>
         @i class: 'icon x clickable', click: 'cancel'
         @strong '码云 -- 提交'
@@ -36,7 +36,7 @@ class CommitDialog extends Dialog
 #    for dir in atom.project.getDirectories()
 #      resolvePath = path.resolve(dir.getPath())
 #      git('git remote -v', {cwd: resolvePath}).then (stdout) =>
-#        if stdout.match /gitosc\s(.+)\s\(push\)/
+#        if stdout.match /gitee\s(.+)\s\(push\)/
 #          option = document.createElement("option")
 #          option.value = resolvePath
 #          option.text = path.basename(resolvePath)
