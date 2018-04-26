@@ -14,7 +14,7 @@ apm install gitee
 
 或者可以打开设置页面安装 gitee
 
-![Install](https://gitee.com/GitGroup/atom-gitee/raw/master/images/install.png)
+![Install](https://github.com/fcharlie/atom-gitee/raw/master/images/install.png)
 
 ## 发现问题
 
